@@ -1,5 +1,5 @@
 <#
-    AnyDesk Block Remover  —  Windows
+    AnyDesk Block Remover - Windows
     --------------------------------------------------------------
     Recovers a personal AnyDesk install from the free-tier
     "commercial use suspected / session ended" block by resetting
@@ -67,11 +67,11 @@ function Write-Banner {
     Write-Host ""
 }
 
-function Step($text)  { Write-Host ("  " + (C '38;5;45' '➜ ') + $text) }
-function Ok($text)    { Write-Host ("    " + (C '38;5;82' '✔ ') + (C '38;5;250' $text)) }
-function Warn($text)  { Write-Host ("    " + (C '38;5;214' '⚠ ') + (C '38;5;222' $text)) }
-function Skip($text)  { Write-Host ("    " + (C '38;5;240' '· ') + (C '38;5;240' $text)) }
-function Rule()       { Write-Host (C '38;5;240' ("  " + ('─' * 50))) }
+function Step($text)  { Write-Host ("  " + (C '38;5;45' ([string][char]0x279C + ' ')) + $text) }
+function Ok($text)    { Write-Host ("    " + (C '38;5;82' ([string][char]0x2714 + ' ')) + (C '38;5;250' $text)) }
+function Warn($text)  { Write-Host ("    " + (C '38;5;214' ([string][char]0x26A0 + ' ')) + (C '38;5;222' $text)) }
+function Skip($text)  { Write-Host ("    " + (C '38;5;240' ([string][char]0x00B7 + ' ')) + (C '38;5;240' $text)) }
+function Rule()       { Write-Host (C '38;5;240' ("  " + ([string][char]0x2500 * 50))) }
 
 # ----------------------------------------------------------------------
 #  Main
@@ -84,18 +84,18 @@ $confDirs = @(
     (Join-Path $env:APPDATA    'AnyDesk')
 )
 
-# Files that hold the machine identity / block state — safe to delete.
+# Files that hold the machine identity / block state - safe to delete.
 # These are what get regenerated to give you a fresh, unblocked ID.
 $killFiles = @(
     'service.conf', 'system.conf',
     'ad_svc.trace', 'ad.trace', 'connection_trace.txt'
 )
 
-# Files we explicitly PRESERVE — these hold your saved PC IDs / favorites.
+# Files we explicitly PRESERVE - these hold your saved PC IDs / favorites.
 $keepFiles = @('user.conf')
 
 Warn "Your saved PC IDs live in 'user.conf' (the address book / favorites)."
-Warn "This tool keeps that file, but RESET IDs CANNOT BE GUARANTEED — please"
+Warn "This tool keeps that file, but RESET IDs CANNOT BE GUARANTEED - please"
 Warn "note down any IDs/aliases you rely on before continuing, just in case."
 Write-Host ""
 
@@ -157,12 +157,12 @@ foreach ($d in $confDirs) {
     }
     foreach ($k in $keepFiles) {
         if (Test-Path (Join-Path $d $k)) {
-            Skip "Kept $k  ($(Split-Path $d -Leaf))  ← your saved PC IDs"
+            Skip "Kept $k  ($(Split-Path $d -Leaf))  <- your saved PC IDs"
         }
     }
 }
 if ($deleted -eq 0) {
-    Warn "No identity files found — is AnyDesk installed for this user?"
+    Warn "No identity files found - is AnyDesk installed for this user?"
 }
 
 # 4. Restart the service so a fresh ID is generated.
@@ -174,8 +174,8 @@ foreach ($s in $svc) {
 
 Rule
 Write-Host ""
-Write-Host ("  " + (C '38;5;82' '✔ Done!'))
-Write-Host (C '38;5;250' "  Open AnyDesk — it should show a NEW ID and the block should be gone.")
+Write-Host ("  " + (C '38;5;82' ([string][char]0x2714 + ' Done!')))
+Write-Host (C '38;5;250' "  Open AnyDesk - it should show a NEW ID and the block should be gone.")
 Write-Host (C '38;5;250' "  Your saved PC IDs (favorites) were left untouched.")
 if (-not $NoBackup) {
     Write-Host (C '38;5;240' "  A full backup was saved in your user folder if you need to restore.")
